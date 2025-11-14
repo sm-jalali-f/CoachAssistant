@@ -1,7 +1,6 @@
 package com.freez.multi_calendar.provider
 
 import com.freez.multi_calendar.model.AppDate
-import kotlin.to
 
 interface CalendarProvider {
     fun getCurrentDate(): AppDate
@@ -18,5 +17,5 @@ interface CalendarProvider {
      *
      * Note: If `from` is after `to`, implementations should return an empty list.
      */
-    fun getDates(from: String, to: String): List<AppDate>
+    fun getDates(from: AppDate, to: AppDate): List<AppDate>
 }

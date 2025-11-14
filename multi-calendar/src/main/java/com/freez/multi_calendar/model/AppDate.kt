@@ -6,6 +6,6 @@ data class AppDate(
     val year: Int,
     val month: Int,
     val day: Int,
-    val displayName: String,
+    val dayName: String,
     val isoDate: LocalDate
 )
