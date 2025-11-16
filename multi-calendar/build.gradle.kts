@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.freez.multi_calendar"
+    namespace = "com.freez.multiCalendar"
     compileSdk = 36
 
     defaultConfig {

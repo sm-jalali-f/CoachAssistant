@@ -1,4 +1,4 @@
-package com.freez.multi_calendar.model
+package com.freez.multiCalendar.model
 
 import java.time.LocalDate
 
@@ -7,5 +7,5 @@ data class AppDate(
     val month: Int,
     val day: Int,
     val dayName: String,
-    val isoDate: LocalDate
+    val isoDate: LocalDate,
 )
