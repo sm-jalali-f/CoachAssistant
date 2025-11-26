@@ -3,6 +3,11 @@ package com.freez.datasource.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.freez.datasource.database.dao.ClassSessionDao
+import com.freez.datasource.database.dao.CourtDao
+import com.freez.datasource.database.dao.StudentClassDao
+import com.freez.datasource.database.dao.StudentDao
+import com.freez.datasource.database.dao.StudentPaymentDao
 import com.freez.datasource.database.entity.ClassSessionEntity
 import com.freez.datasource.database.entity.CourtEntity
 import com.freez.datasource.database.entity.StudentClassEntity
