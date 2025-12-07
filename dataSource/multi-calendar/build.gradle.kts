@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(libs.versions.domain.get()))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

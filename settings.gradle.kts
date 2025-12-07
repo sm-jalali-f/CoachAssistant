@@ -27,6 +27,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "CoachAssistant"
 include(":app")
-include(":multi-calendar")
-include(":dataSource")
+include(":dataSource:multi-calendar")
+include(":dataSource:database")
 include(":presenter")
+include(":domain")
