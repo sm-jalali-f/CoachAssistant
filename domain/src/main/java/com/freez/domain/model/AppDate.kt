@@ -1,4 +1,4 @@
-package com.freez.domain
+package com.freez.domain.model
 
 import java.time.LocalDate
 
