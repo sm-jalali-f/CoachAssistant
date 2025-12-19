@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Coach Assistant</string>
+    <string name="monthly_session_count">Month Session Count</string>
+    <string name="monthly_income">Month Income</string>
 </resources>

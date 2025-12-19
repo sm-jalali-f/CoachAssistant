@@ -8,35 +8,38 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.freez.domain.model.Money
+import com.freez.presenter.R
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
 
-
+    val uiState by homeViewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,41 +50,35 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         // ---------------------------
         // Header: Profile + Greeting
         // ---------------------------
-        ProfileAndGreeting()
+        ProfileAndGreeting(uiState.greeting.name, uiState.greeting.greeting)
 
         Spacer(Modifier.height(20.dp))
 
         // ---------------------------
         // Monthly Stats
         // ---------------------------
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            StatBox(title = "تعداد کلاس ماه", value = totalClasses.toString())
-            StatBox(title = "درآمد ماه", value = "$$monthIncome")
-        }
+        MonthlyStats(uiState.monthlyReport.sessionCount, uiState.monthlyReport.income)
 
         Spacer(Modifier.height(20.dp))
 
         // ---------------------------
         // Horizontal Day Calendar
         // ---------------------------
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(30) { index ->
-                val dayNumber = index + 1
-                val isSelected = dayNumber == selectedDay
-
-                DayItem(
-                    day = dayNumber,
-                    weekday = getWeekday(dayNumber),
-                    selected = isSelected,
-                    onClick = { onDayClick(dayNumber) }
-                )
-            }
-        }
+//        LazyRow(
+//            horizontalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            items(30) { index ->
+//                val dayNumber = index + 1
+//                val isSelected = dayNumber == selectedDay
+//
+//                DayItem(
+//                    day = dayNumber,
+//                    weekday = getWeekday(dayNumber),
+//                    selected = isSelected,
+//                    onClick = { onDayClick(dayNumber) }
+//                )
+//            }
+//        }
 
         Spacer(Modifier.height(24.dp))
 
@@ -92,7 +89,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         // ---------------------------
         // Vertical Classes List
         // ---------------------------
-        LazyColumn(
+        /*LazyColumn(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -103,7 +100,26 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                     court = "Court ${index + 1}"
                 )
             }
-        }
+        }*/
+    }
+}
+
+@Composable
+fun MonthlyStats(totalClasses: Int, money: Money) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        StatBox(
+            modifier = Modifier.weight(0.5f),
+            title = stringResource(R.string.monthly_session_count),
+            value = totalClasses.toString()
+        )
+        StatBox(
+            modifier = Modifier.weight(0.5f),
+            title = stringResource(R.string.monthly_income),
+            value = "${money.currency} ${money.amount}"
+        )
     }
 }
 
@@ -133,9 +149,9 @@ fun ProfileAndGreeting(name: String, greetingExpression: String) {
 
 
 @Composable
-fun StatBox(title: String, value: String) {
+fun StatBox(modifier: Modifier = Modifier, title: String, value: String) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 4.dp)
             .border(1.dp, Color.Gray, RoundedCornerShape(12.dp))
             .padding(12.dp),
