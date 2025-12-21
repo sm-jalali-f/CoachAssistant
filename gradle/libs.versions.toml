@@ -15,15 +15,17 @@ navigationCompose = "2.9.6"
 room = "2.8.4"
 spotless = "6.19.0"
 ksp = "2.3.2"
-presenter = ":presenter"
 domain = ":domain"
 jetbrainsKotlinJvm = "2.2.21"
 ui = "1.10.0"
 foundation = "1.10.0"
 uiTextGoogleFonts = "1.10.0"
+hilt = "2.57.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -56,4 +58,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 ksp = { id = "com.google.devtools.ksp", version.ref ="ksp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+android-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 

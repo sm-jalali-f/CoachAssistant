@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.android.hilt) apply false
 }
 subprojects {
     apply(plugin = "com.diffplug.spotless")
