@@ -29,5 +29,5 @@ rootProject.name = "CoachAssistant"
 include(":app")
 include(":dataSource:multi-calendar")
 include(":dataSource:database")
-include(":presenter")
+//include(":presenter")
 include(":domain")

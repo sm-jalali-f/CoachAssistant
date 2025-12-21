@@ -1,4 +1,4 @@
-package com.freez.presenter.navigation
+package com.freez.coachassistant.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable

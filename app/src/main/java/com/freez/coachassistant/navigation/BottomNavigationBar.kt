@@ -1,5 +1,7 @@
-package com.freez.presenter.navigation
+package com.freez.coachassistant.navigation
 
+import android.net.http.SslCertificate.restoreState
+import android.net.http.SslCertificate.saveState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem

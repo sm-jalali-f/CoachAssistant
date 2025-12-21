@@ -1,4 +1,4 @@
-package com.freez.presenter.ui.home
+package com.freez.coachassistant.ui.home
 
 import com.freez.domain.model.AppDate
 import com.freez.domain.model.Money

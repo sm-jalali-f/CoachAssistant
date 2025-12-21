@@ -1,4 +1,4 @@
-package com.freez.presenter.ui.finance
+package com.freez.coachassistant.ui.finance
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.freez.presenter.ui.home
+package com.freez.coachassistant.ui.home
 
 import androidx.lifecycle.ViewModel
 import com.freez.domain.model.Money

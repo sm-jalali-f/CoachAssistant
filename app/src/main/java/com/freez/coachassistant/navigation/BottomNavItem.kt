@@ -1,6 +1,7 @@
-package com.freez.presenter.navigation
+package com.freez.coachassistant.navigation
 
-import com.freez.presenter.R
+import com.freez.coachassistant.R
+
 
 sealed class BottomNavItem(val route: String, val title: String, val icon: Int) {
     object Home : BottomNavItem(Destination.Home.route, "Home", R.drawable.ic_dashboard)

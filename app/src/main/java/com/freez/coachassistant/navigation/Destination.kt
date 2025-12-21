@@ -1,4 +1,4 @@
-package com.freez.presenter.navigation
+package com.freez.coachassistant.navigation
 
 sealed class Destination(val route: String) {
     object Home : Destination("home")
