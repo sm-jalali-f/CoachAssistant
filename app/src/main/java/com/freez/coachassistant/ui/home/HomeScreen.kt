@@ -40,14 +40,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.freez.coachassistant.R
+import com.freez.domain.model.AppDate
 import com.freez.domain.model.Money
 
 private val HEADER_HEIGHT = 200.dp
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
-    val uiState by homeViewModel.uiState.collectAsState()
+    val uiState by homeViewModel.state.collectAsState()
     val listState = rememberLazyListState()
     val headerHeight = HEADER_HEIGHT
     val headerHeightPx = with(LocalDensity.current) { headerHeight.toPx() }
@@ -91,7 +92,14 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                HorizontalDaysList()
+                HorizontalDaysList(
+                    dates = uiState.datesList,
+                    today = uiState.today,
+                    selectedDay = uiState.selectedDate,
+                    dayClicked = {
+                        viewModel.onIntent(HomeIntent.SelectDate(it))
+                    })
+
                 Spacer(Modifier.height(24.dp))
                 Text(
                     modifier = Modifier.padding(
@@ -101,12 +109,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                         bottom = 0.dp
                     ), text = "Class sessions:", fontWeight = FontWeight.Bold
                 )
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(4.dp))
             }
         }
         items(20) { index ->
             SessionItem(
-                Modifier.padding(start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp),
+                Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
                 studentName = "Student $index",
                 time = "18:00",
                 court = "Court ${index + 1}"
@@ -129,26 +137,32 @@ fun HomeHeader(modifier: Modifier, greeting: GreetingState, monthlyReport: Month
 }
 
 @Composable
-fun HorizontalDaysList() {
-    val selectedDay = 15
+fun HorizontalDaysList(
+    dates: List<AppDate>,
+    today: AppDate,
+    selectedDay: AppDate,
+    dayClicked: (AppDate) -> Unit
+) {
+
     val listState = rememberLazyListState()
     LaunchedEffect(selectedDay) {
-        listState.animateScrollToItem(selectedDay - 3)
+        listState.animateScrollToItem(dates.indexOf(selectedDay) - 3)
     }
 
     LazyRow(
         state = listState,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(30) { index ->
-            val dayNumber = index + 1
-            val isSelected = dayNumber == selectedDay
+        items(dates.size) { index ->
+//            val dayNumber = index + 1
+            val isSelected = dates[index] == today
 
             DayItem(
-                day = dayNumber,
-                weekday = getWeekday(dayNumber),
+                day = dates[index].day,
+//                weekday = getWeekday(dates[index].),
+                weekday = dates[index].dayName,
                 selected = isSelected,
-                onClick = { }
+                onClick = { dayClicked(dates[index]) }
             )
         }
     }

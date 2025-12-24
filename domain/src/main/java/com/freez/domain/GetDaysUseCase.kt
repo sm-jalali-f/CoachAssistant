@@ -1,5 +1,9 @@
 package com.freez.domain
 
-class GetDaysUseCase {
+import com.freez.domain.model.AppDate
 
+interface GetDaysUseCase {
+
+    fun getDays(): List<AppDate>
+    fun today(): AppDate
 }
