@@ -36,7 +36,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun selectDate(date: AppDate) {
-        // TODO:  
+        _state.value = _state.value.copy(selectedDate = date)
+        // TODO: call loadSession in coroutine?
     }
 
     private fun loadInitial() {

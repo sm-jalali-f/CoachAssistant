@@ -2,6 +2,8 @@ package com.freez.multiCalendar.provider
 
 import com.freez.multiCalendar.model.CalendarDate
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 class GregorianCalendarProvider : CalendarProvider {
     override fun getCurrentDate(): CalendarDate {
@@ -11,6 +13,7 @@ class GregorianCalendarProvider : CalendarProvider {
             date.monthValue,
             date.dayOfMonth,
             date.dayOfWeek.name,
+            date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()),
             date,
         )
     }
@@ -29,11 +32,12 @@ class GregorianCalendarProvider : CalendarProvider {
         while (indexDate.isBefore(endDate) || indexDate.isEqual(endDate)) {
             dates.add(
                 CalendarDate(
-                    indexDate.year,
-                    indexDate.monthValue,
-                    indexDate.dayOfMonth,
-                    indexDate.dayOfWeek.name,
-                    indexDate,
+                    year = indexDate.year,
+                    month = indexDate.monthValue,
+                    day=indexDate.dayOfMonth,
+                    dayName = indexDate.dayOfWeek.name,
+                    monthName = indexDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+                    isoDate = indexDate,
                 ),
             )
             indexDate = indexDate.plusDays(1)

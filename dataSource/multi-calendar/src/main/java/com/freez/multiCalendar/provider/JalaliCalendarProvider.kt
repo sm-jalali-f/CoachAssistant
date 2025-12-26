@@ -47,6 +47,7 @@ class JalaliCalendarProvider : CalendarProvider {
             solar.month.value,
             solar.date,
             solar.weekDay.getPersianName(),
+            solar.month.getPersianName(),
             localDate,
         )
     }

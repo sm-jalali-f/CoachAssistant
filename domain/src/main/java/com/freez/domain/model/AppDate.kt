@@ -1,10 +1,9 @@
 package com.freez.domain.model
 
-import java.time.LocalDate
-
 data class AppDate(
     val year: Int,
     val month: Int,
     val day: Int,
-    val dayName: String,
+    val dayOfWeek: String,
+    val monthName: String,
 )

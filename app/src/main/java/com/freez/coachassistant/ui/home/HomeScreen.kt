@@ -91,6 +91,11 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                    ),
+                horizontalAlignment = Alignment.Start
             ) {
                 HorizontalDaysList(
                     dates = uiState.datesList,
@@ -101,13 +106,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                     })
 
                 Spacer(Modifier.height(24.dp))
+                val selectedDate =
+                    "${uiState.selectedDate?.day} ${uiState.selectedDate?.monthName} ${uiState.selectedDate?.year}"
                 Text(
-                    modifier = Modifier.padding(
-                        start = 8.dp,
-                        end = 8.dp,
-                        top = 0.dp,
-                        bottom = 0.dp
-                    ), text = "Class sessions:", fontWeight = FontWeight.Bold
+                    text = "Class sessions ($selectedDate):", fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(4.dp))
             }
@@ -145,15 +147,56 @@ fun HorizontalDaysList(
 ) {
 
     val listState = rememberLazyListState()
+
+    val firstVisibleMonth by remember {
+        derivedStateOf {
+            val firstVisibleItem = listState.layoutInfo
+                .visibleItemsInfo
+                .firstOrNull()
+
+            firstVisibleItem?.index
+        }
+    }
+    val currentMonth by remember {
+        derivedStateOf {
+            firstVisibleMonth?.let { index ->
+                dates?.getOrNull(index)?.monthName
+            }
+        }
+    }
+    val currentYear by remember {
+        derivedStateOf {
+            firstVisibleMonth?.let { index ->
+                dates?.getOrNull(index)?.year
+            }
+        }
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(currentMonth ?: "-", fontWeight = FontWeight.Bold)
+        Spacer(Modifier.width(15.dp))
+        Text("${currentYear ?: "-"}", fontWeight = FontWeight.Bold)
+    }
+    Spacer(Modifier.height(15.dp))
+
+    val visibleCount by remember {
+        derivedStateOf {
+            listState.layoutInfo.visibleItemsInfo.size
+
+        }
+    }
     LaunchedEffect(selectedDay) {
         dates?.let { d ->
             selectedDay?.let { sd ->
-                if (d.isNotEmpty())
-                    listState.animateScrollToItem(maxOf(0, d.indexOf(sd) - 3))
+                listState.animateScrollToItem(maxOf(0, d.indexOf(sd) - (visibleCount - 1) / 2))
             }
         }
-
     }
+
     if (dates != null) {
         LazyRow(
             state = listState,
@@ -161,12 +204,13 @@ fun HorizontalDaysList(
         ) {
             items(dates.size) { index ->
 //            val dayNumber = index + 1
-                val isSelected = dates[index] == today
+                val isSelected = dates[index] == selectedDay
+                val isToday = dates[index] == today
 
                 DayItem(
                     day = dates[index].day,
-//                weekday = getWeekday(dates[index].),
-                    weekday = dates[index].dayName,
+                    isToday = isToday,
+                    weekday = dates[index].dayOfWeek,
                     selected = isSelected,
                     onClick = { dayClicked(dates[index]) }
                 )
@@ -252,19 +296,28 @@ fun StatBox(modifier: Modifier = Modifier, title: String, value: String) {
 fun DayItem(
     day: Int,
     weekday: String,
-    isToday: Boolean = false,
+    isToday: Boolean,
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val bg = if (selected) Color(0xFF007BFF) else Color.Transparent
-    val textColor = if (selected) Color.White else Color.Black
+    val bg =
+        if (selected) MaterialTheme.colorScheme.primary
+        else Color.Transparent
+    val textColor =
+        if (selected) MaterialTheme.colorScheme.onPrimary
+        else if (isToday) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onBackground
+    val borderColor =
+        if (selected) MaterialTheme.colorScheme.primary
+        else if (isToday) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onBackground
 
     Column(
         modifier = Modifier
             .width(60.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, Color.Gray, RoundedCornerShape(12.dp))
-//            .background(bg)
+            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+            .background(bg)
             .clickable(onClick = onClick)
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally

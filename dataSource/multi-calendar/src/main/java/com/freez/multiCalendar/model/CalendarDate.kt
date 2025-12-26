@@ -7,5 +7,6 @@ data class CalendarDate(
     val month: Int,
     val day: Int,
     val dayName: String,
+    val monthName: String,
     var isoDate: LocalDate?,
 )

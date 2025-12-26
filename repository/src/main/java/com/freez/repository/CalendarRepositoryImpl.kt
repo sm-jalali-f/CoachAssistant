@@ -29,7 +29,7 @@ class CalendarRepositoryImpl @Inject constructor(
 }
 
 private fun AppDate.toCalendarDate(): CalendarDate {
-    return CalendarDate(this.year, this.month, this.day, this.dayName, null)
+    return CalendarDate(this.year, this.month, this.day, this.dayOfWeek, this.monthName, null)
 
 }
 
@@ -38,6 +38,7 @@ private fun CalendarDate.toAppDate(): AppDate {
         year = this.year,
         month = this.month,
         day = this.day,
-        dayName = this.dayName,
+        monthName = this.monthName,
+        dayOfWeek = this.dayName,
     )
 }
