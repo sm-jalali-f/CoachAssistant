@@ -1,9 +1,17 @@
 package com.freez.domain
 
 import com.freez.domain.model.AppDate
+import com.freez.domain.repositories.CalendarRepository
 
-interface GetDaysUseCase {
+class GetDaysUseCase constructor(
+    private val calendarRepository: CalendarRepository
+) {
 
-    fun getDays(): List<AppDate>
-    fun today(): AppDate
+    fun getDays(): List<AppDate> {
+        return calendarRepository.getAroundDays()
+    }
+
+    fun today(): AppDate {
+        return calendarRepository.getToday()
+    }
 }

@@ -6,6 +6,7 @@ import com.freez.domain.ClassSessionUseCase
 import com.freez.domain.GetDaysUseCase
 import com.freez.domain.UserInfoUseCase
 import com.freez.domain.model.AppDate
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,10 +14,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userInfoUseCase: UserInfoUseCase,
     private val getDaysUseCase: GetDaysUseCase,
-    private val classSessionUseCase: ClassSessionUseCase
+//    private val classSessionUseCase: ClassSessionUseCase
 ) : ViewModel() {
 
     private lateinit var _state: MutableStateFlow<HomeUiState>
@@ -28,6 +30,11 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.SelectDate -> selectDate(intent.date)
         }
     }
+
+    private fun selectDate(date: AppDate) {
+        // TODO:  
+    }
+
     private fun loadInitial() {
         viewModelScope.launch {
             runCatching {
@@ -59,38 +66,39 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-    private fun selectDate(date: AppDate) {
-        _state.update {
-            it.copy(
-                selectedDate = date,
-                loading = true
-            )
-        }
-        loadClassSessions(date)
-    }
 
     private fun loadClassSessions(date: AppDate) {
-        viewModelScope.launch {
-            runCatching {
-                val sessions = classSessionUseCase(date)
-
-                _state.update {
-                    it.copy(
-                        classSessionList = sessions,
-                        loading = false,
-                        error = null
-                    )
-                }
-
-            }.onFailure {
-                _state.update { it.copy(loading = false, error = it.message) }
-                _effect.send(HomeEffect.ShowError("Failed to load sessions"))
-            }
-        }
+        // TODO:
     }
-}
-
-
+    /* private fun selectDate(date: AppDate) {
+         _state.update {
+             it.copy(
+                 selectedDate = date,
+                 loading = true
+             )
+         }
+         loadClassSessions(date)
+     }
+ 
+     private fun loadClassSessions(date: AppDate) {
+         viewModelScope.launch {
+             runCatching {
+                 val sessions = classSessionUseCase(date)
+ 
+                 _state.update {
+                     it.copy(
+                         classSessionList = sessions,
+                         loading = false,
+                         error = null
+                     )
+                 }
+ 
+             }.onFailure {
+                 _state.update { it.copy(loading = false, error = it.message) }
+                 _effect.send(HomeEffect.ShowError("Failed to load sessions"))
+             }
+         }
+     }*/
 }
 
 //MutableStateFlow(

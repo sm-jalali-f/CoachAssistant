@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.freez.coachassistant.R
 import com.freez.domain.model.AppDate
@@ -97,7 +98,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                     today = uiState.today,
                     selectedDay = uiState.selectedDate,
                     dayClicked = {
-                        viewModel.onIntent(HomeIntent.SelectDate(it))
+                        homeViewModel.onIntent(HomeIntent.SelectDate(it))
                     })
 
                 Spacer(Modifier.height(24.dp))
@@ -320,10 +321,10 @@ fun getWeekday(day: Int): String {
 @Preview
 @Composable
 fun StatBoxPreview() {
-//    HomeScreen()
-    Box() {
-        Text("Hi")
-    }
+    HomeScreen()
+//    Box() {
+//        Text("Hi")
+//    }
 
 //    StatBox(title = "تعد اد کلاس ماه", value = "45")
 }

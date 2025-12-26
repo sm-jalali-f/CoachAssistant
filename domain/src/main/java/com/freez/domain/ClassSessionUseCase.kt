@@ -1,4 +1,4 @@
 package com.freez.domain
 
-interface ClassSessionUseCase {
+class ClassSessionUseCase {
 }

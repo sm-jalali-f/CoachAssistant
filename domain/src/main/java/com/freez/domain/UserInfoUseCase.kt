@@ -1,6 +1,8 @@
 package com.freez.domain
 
-interface UserInfoUseCase {
+class UserInfoUseCase {
 
-    fun getName(): String
+    fun getName(): String {
+        return "Mohamad"
+    }
 }
