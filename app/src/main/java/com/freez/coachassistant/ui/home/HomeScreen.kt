@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.freez.coachassistant.R
 import com.freez.domain.model.AppDate
 import com.freez.domain.model.Money
@@ -113,64 +112,71 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 Spacer(Modifier.height(4.dp))
             }
         }
-        items(20) { index ->
-            SessionItem(
-                Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
-                studentName = "Student $index",
-                time = "18:00",
-                court = "Court ${index + 1}"
-            )
-        }
+//        items(20) { index ->
+//            SessionItem(
+//                Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+//                studentName = "Student $index",
+//                time = "18:00",
+//                court = "Court ${index + 1}"
+//            )
+//        }
     }
 }
 
 @Composable
-fun HomeHeader(modifier: Modifier, greeting: GreetingState, monthlyReport: MonthlyReport) {
+fun HomeHeader(modifier: Modifier, greeting: GreetingState?, monthlyReport: MonthlyReport?) {
     Column(modifier = modifier.padding(10.dp)) {
         ProfileAndGreeting(
             modifier = Modifier.fillMaxWidth(),
-            greeting.name, greeting.greeting
+            greeting?.name ?: "UserName", greeting?.greeting ?: "Hi"
         )
         Spacer(Modifier.height(10.dp))
-        MonthlyStats(monthlyReport.sessionCount, monthlyReport.income)
+        MonthlyStats(monthlyReport?.sessionCount ?: 0, monthlyReport?.income)
         Spacer(Modifier.height(10.dp))
     }
 }
 
 @Composable
 fun HorizontalDaysList(
-    dates: List<AppDate>,
-    today: AppDate,
-    selectedDay: AppDate,
+    dates: List<AppDate>?,
+    today: AppDate?,
+    selectedDay: AppDate?,
     dayClicked: (AppDate) -> Unit
 ) {
 
     val listState = rememberLazyListState()
     LaunchedEffect(selectedDay) {
-        listState.animateScrollToItem(dates.indexOf(selectedDay) - 3)
+        dates?.let { d ->
+            selectedDay?.let { sd ->
+                if (d.isNotEmpty())
+                    listState.animateScrollToItem(maxOf(0, d.indexOf(sd) - 3))
+            }
+        }
+
     }
-
-    LazyRow(
-        state = listState,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(dates.size) { index ->
+    if (dates != null) {
+        LazyRow(
+            state = listState,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(dates.size) { index ->
 //            val dayNumber = index + 1
-            val isSelected = dates[index] == today
+                val isSelected = dates[index] == today
 
-            DayItem(
-                day = dates[index].day,
+                DayItem(
+                    day = dates[index].day,
 //                weekday = getWeekday(dates[index].),
-                weekday = dates[index].dayName,
-                selected = isSelected,
-                onClick = { dayClicked(dates[index]) }
-            )
+                    weekday = dates[index].dayName,
+                    selected = isSelected,
+                    onClick = { dayClicked(dates[index]) }
+                )
+            }
         }
     }
 }
 
 @Composable
-fun MonthlyStats(totalClasses: Int, money: Money) {
+fun MonthlyStats(totalClasses: Int, money: Money?) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -183,7 +189,7 @@ fun MonthlyStats(totalClasses: Int, money: Money) {
         StatBox(
             modifier = Modifier.weight(0.5f),
             title = stringResource(R.string.monthly_income),
-            value = "${money.currency} ${money.amount}"
+            value = "${money?.currency} ${money?.amount}"
         )
     }
 }

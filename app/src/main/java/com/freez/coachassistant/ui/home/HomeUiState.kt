@@ -5,12 +5,12 @@ import com.freez.domain.model.Money
 
 data class HomeUiState(
     val loading: Boolean = true,
-    val greeting: GreetingState,
-    val monthlyReport: MonthlyReport,
-    val datesList: List<AppDate>,
-    val today: AppDate,
-    val selectedDate: AppDate = today,
-    val classSessionList: List<ClassSessionUi>?,
+    val greeting: GreetingState? = null,
+    val monthlyReport: MonthlyReport? = null,
+    val datesList: List<AppDate>? = null,
+    val today: AppDate? = null,
+    val selectedDate: AppDate? = today,
+    val classSessionList: List<ClassSessionUi>? = null,
     val loadingClassSessions: Boolean = true,
 )
 

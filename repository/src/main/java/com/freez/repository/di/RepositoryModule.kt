@@ -1,5 +1,6 @@
 package com.freez.repository.di
 
+import com.freez.domain.repositories.CalendarRepository
 import com.freez.multiCalendar.provider.CalendarProvider
 import com.freez.multiCalendar.provider.GregorianCalendarProvider
 import com.freez.multiCalendar.provider.JalaliCalendarProvider
@@ -44,7 +45,7 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideCalendarRepository(calendarProvider: CalendarProvider): CalendarRepositoryImpl {
+    fun provideCalendarRepository(calendarProvider: CalendarProvider): CalendarRepository {
         return CalendarRepositoryImpl(calendarProvider)
     }
 }
