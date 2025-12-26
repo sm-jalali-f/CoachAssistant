@@ -3,13 +3,6 @@ package com.freez.multiCalendar.util
 import com.freez.multiCalendar.model.JalaliMonth
 import com.freez.multiCalendar.model.WeekDay
 import java.time.LocalDate
-import kotlin.collections.minusAssign
-import kotlin.collections.plusAssign
-import kotlin.compareTo
-import kotlin.div
-import kotlin.rem
-import kotlin.text.toInt
-import kotlin.times
 
 internal class SolarCalendar {
 
@@ -27,66 +20,65 @@ internal class SolarCalendar {
     constructor(gregorianDate: LocalDate) {
         calcSolarCalendar(gregorianDate)
     }
-    // kotlin
+
     fun toGregorianDate(): LocalDate {
-        val jy = this.year
-        val jm = this.month.value
-        val jd = this.date
 
-        val jMonthDays = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
-        val gMonthDays = intArrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+        val jy2 = this.year - 979
+        val jm2 = this.month.value - 1
+        val jd2 = this.date - 1
 
-        var jyAdj = jy + 1595
-        var days = -355668L + 365L * jyAdj + (jyAdj / 33L) * 8L + ((jyAdj % 33L + 3L) / 4L)
-        for (i in 0 until (jm - 1)) {
-            days += jMonthDays[i]
+        var jDayNo =
+            365 * jy2 +
+                    (jy2 / 33) * 8 +
+                    ((jy2 % 33) + 3) / 4
+
+        for (i in 0 until jm2) {
+            jDayNo += if (i < 6) 31 else 30
         }
-        days += (jd - 1)
 
-        var gDayNo = days
-        var gy = (400L * gDayNo) / 146097L
-        gDayNo %= 146097L
+        jDayNo += jd2
+
+        var gDayNo = jDayNo + 79
+
+        var gy = 1600 + 400 * (gDayNo / 146097)
+        gDayNo %= 146097
 
         var leap = true
-        if (gDayNo >= 36525L) {
-            gDayNo -= 1L
-            gy += (100L * gDayNo) / 36524L
-            gDayNo %= 36524L
-            if (gDayNo >= 365L) {
-                gDayNo += 1L
-            } else {
-                leap = false
-            }
+        if (gDayNo >= 36525) {
+            gDayNo--
+            gy += 100 * (gDayNo / 36524)
+            gDayNo %= 36524
+
+            if (gDayNo >= 365) gDayNo++
+            else leap = false
         }
 
-        gy += (4L * gDayNo) / 1461L
-        gDayNo %= 1461L
+        gy += 4 * (gDayNo / 1461)
+        gDayNo %= 1461
 
-        if (gDayNo >= 366L) {
+        if (gDayNo >= 366) {
             leap = false
-            gDayNo -= 366L
-            gy += gDayNo / 365L
-            gDayNo %= 365L
+            gDayNo--
+            gy += gDayNo / 365
+            gDayNo %= 365
         }
 
-        gy += 1L
+        val gMonthDays = intArrayOf(
+            31,
+            if (leap) 29 else 28,
+            31, 30, 31, 30,
+            31, 31, 30, 31, 30, 31
+        )
 
         var gm = 0
-        var gd: Long = 0
-        var i = 0
-        while (i < 12) {
-            var daysInMonth = gMonthDays[i].toLong()
-            if (i == 1 && leap) daysInMonth += 1L
-            if (gDayNo < daysInMonth) {
-                gm = i + 1
-                gd = gDayNo + 1L
-                break
-            }
-            gDayNo -= daysInMonth
-            i++
+        while (gm < 12 && gDayNo >= gMonthDays[gm]) {
+            gDayNo -= gMonthDays[gm]
+            gm++
         }
 
-        return LocalDate.of(gy.toInt(), gm, gd.toInt())
+        val gd = gDayNo + 1
+
+        return LocalDate.of(gy, gm + 1, gd)
     }
 
 
@@ -138,6 +130,7 @@ internal class SolarCalendar {
                             monthValue = date / 31
                             date = 31
                         }
+
                         else -> {
                             monthValue = (date / 31) + 1
                             date = (date % 31)
@@ -152,6 +145,7 @@ internal class SolarCalendar {
                             monthValue = (date / 30) + 6
                             date = 30
                         }
+
                         else -> {
                             monthValue = (date / 30) + 7
                             date = (date % 30)
@@ -173,6 +167,7 @@ internal class SolarCalendar {
                         monthValue = (date / 30) + 9
                         date = 30
                     }
+
                     else -> {
                         monthValue = (date / 30) + 10
                         date = (date % 30)
@@ -198,6 +193,7 @@ internal class SolarCalendar {
                             monthValue = (date / 31)
                             date = 31
                         }
+
                         else -> {
                             monthValue = (date / 31) + 1
                             date = (date % 31)
@@ -212,6 +208,7 @@ internal class SolarCalendar {
                             monthValue = (date / 30) + 6
                             date = 30
                         }
+
                         else -> {
                             monthValue = (date / 30) + 7
                             date = (date % 30)
@@ -227,6 +224,7 @@ internal class SolarCalendar {
                         monthValue = (date / 30) + 9
                         date = 30
                     }
+
                     else -> {
                         monthValue = (date / 30) + 10
                         date = (date % 30)
