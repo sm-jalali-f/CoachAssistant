@@ -74,4 +74,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+//    implementation(platform(libs.kotlinx.coroutines.bom))
+//    implementation(libs.jetbrains.kotlinx.coroutines.core)
+//    implementation(libs.kotlinx.coroutines.android)
+
 }

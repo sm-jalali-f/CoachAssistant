@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.freez.coachassistant.ui.AppViewModel
 import com.freez.coachassistant.ui.CoachAssistantApp
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,7 +17,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CoachAssistantApp()
+            val viewModel: AppViewModel = hiltViewModel()
+            val appLanguage by viewModel.appLanguage.collectAsState()
+
+            CoachAssistantApp(appLanguage = appLanguage)
         }
     }
 }

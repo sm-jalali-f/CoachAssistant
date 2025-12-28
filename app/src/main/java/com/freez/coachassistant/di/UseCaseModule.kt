@@ -1,8 +1,10 @@
 package com.freez.coachassistant.di
 
 import com.freez.domain.GetDaysUseCase
+import com.freez.domain.ObserverLanguageUseCase
 import com.freez.domain.UserInfoUseCase
 import com.freez.domain.repositories.CalendarRepository
+import com.freez.domain.repositories.LanguageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +25,12 @@ class UseCaseModule {
         calendarRepository: CalendarRepository
     ): GetDaysUseCase {
         return GetDaysUseCase(calendarRepository)
+    }
+
+    @Provides
+    fun provideObserveAppLanguageUseCase(
+        repository: LanguageRepository
+    ): ObserverLanguageUseCase {
+        return ObserverLanguageUseCase(repository)
     }
 }
