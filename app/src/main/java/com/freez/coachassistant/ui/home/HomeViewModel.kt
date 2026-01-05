@@ -7,7 +7,6 @@ import com.freez.domain.UserInfoUseCase
 import com.freez.domain.model.AppDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -22,7 +21,7 @@ class HomeViewModel @Inject constructor(
 
     private var _state: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState(loading = true))
-    val state: StateFlow<HomeUiState> = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     init {
         onIntent(HomeIntent.LoadInitial)

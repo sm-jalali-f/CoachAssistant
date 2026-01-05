@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">دستیار مربی</string>
     <string name="monthly_session_count">تعداد کلاس ماه</string>
     <string name="monthly_income">درآمد ماه</string>
+    <string name="class_session">کلاس های %1s:</string>
+    <string name="hi">سلام 👋</string>
 </resources>

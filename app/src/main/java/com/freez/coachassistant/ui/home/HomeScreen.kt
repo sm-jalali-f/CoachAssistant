@@ -109,7 +109,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 val selectedDate =
                     "${uiState.selectedDate?.day} ${uiState.selectedDate?.monthName} ${uiState.selectedDate?.year}"
                 Text(
-                    text = "Class sessions ($selectedDate):", fontWeight = FontWeight.Bold
+                    text = stringResource(R.string.class_session, selectedDate),
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(4.dp))
             }
@@ -130,7 +131,7 @@ fun HomeHeader(modifier: Modifier, greeting: GreetingState?, monthlyReport: Mont
     Column(modifier = modifier.padding(10.dp)) {
         ProfileAndGreeting(
             modifier = Modifier.fillMaxWidth(),
-            greeting?.name ?: "UserName", greeting?.greeting ?: "Hi"
+            greeting?.name ?: "UserName", greeting?.greeting ?: stringResource(R.string.hi)
         )
         Spacer(Modifier.height(10.dp))
         MonthlyStats(monthlyReport?.sessionCount ?: 0, monthlyReport?.income)
@@ -233,7 +234,7 @@ fun MonthlyStats(totalClasses: Int, money: Money?) {
         StatBox(
             modifier = Modifier.weight(0.5f),
             title = stringResource(R.string.monthly_income),
-            value = "${money?.currency} ${money?.amount}"
+            value = "${money?.currency ?: ""} ${money?.amount ?: 0}"
         )
     }
 }
