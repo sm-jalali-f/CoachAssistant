@@ -27,7 +27,7 @@ fun CoachAssistantApp(appLanguage: AppLanguage) {
     CompositionLocalProvider(
         LocalLayoutDirection provides layoutDirection
     ) {
-        CoachAssistantTheme {
+        CoachAssistantTheme(appLanguage) {
             val assistantNavController = rememberCoachAssistantNavController()
 
             SharedTransitionLayout {

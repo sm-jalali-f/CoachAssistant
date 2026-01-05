@@ -1,7 +1,9 @@
 package com.freez.coachassistant.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.freez.coachassistant.R
@@ -29,7 +31,7 @@ val displayFontFamily = FontFamily(
 // Default Material 3 typography values
 val baseline = Typography()
 
-val AppTypography = Typography(
+val EnglishAppTypography = Typography(
     displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
     displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
     displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
@@ -46,4 +48,80 @@ val AppTypography = Typography(
     labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
     labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
 )
+val VazirmatnFontFamily = FontFamily(
+    Font(R.font.vazirmatn_thin_fd, FontWeight.Thin),
+    Font(R.font.vazirmatn_extra_light_fd, FontWeight.ExtraLight),
+    Font(R.font.vazirmatn_light_fd, FontWeight.Light),
+    Font(R.font.vazirmatn_regular_fd, FontWeight.Normal),
+    Font(R.font.vazirmatn_medium_fd, FontWeight.Medium),
+    Font(R.font.vazirmatn_semi_bold_fd, FontWeight.SemiBold),
+    Font(R.font.vazirmatn_bold_fd, FontWeight.Bold),
+    Font(R.font.vazirmatn_extra_bold_fd, FontWeight.ExtraBold),
+    Font(R.font.vazirmatn_black_fd, FontWeight.Black),
+)
+val PersianAppTypography = Typography(
+    displayLarge = baseline.displayLarge.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.ExtraBold
+    ),
+    displayMedium = baseline.displayMedium.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Bold
+    ),
+    displaySmall = baseline.displaySmall.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Bold
+    ),
 
+    headlineLarge = baseline.headlineLarge.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.SemiBold
+    ),
+    headlineMedium = baseline.headlineMedium.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.SemiBold
+    ),
+    headlineSmall = baseline.headlineSmall.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Medium
+    ),
+
+    titleLarge = baseline.titleLarge.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.SemiBold
+    ),
+    titleMedium = baseline.titleMedium.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Medium
+    ),
+    titleSmall = baseline.titleSmall.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Medium
+    ),
+
+    bodyLarge = baseline.bodyLarge.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Normal
+    ),
+    bodyMedium = baseline.bodyMedium.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Normal
+    ),
+    bodySmall = baseline.bodySmall.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Normal
+    ),
+
+    labelLarge = baseline.labelLarge.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Medium
+    ),
+    labelMedium = baseline.labelMedium.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Normal
+    ),
+    labelSmall = baseline.labelSmall.copy(
+        fontFamily = VazirmatnFontFamily,
+        fontWeight = FontWeight.Normal
+    )
+)
