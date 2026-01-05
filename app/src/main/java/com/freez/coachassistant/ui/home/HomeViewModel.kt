@@ -51,10 +51,6 @@ class HomeViewModel @Inject constructor(
 
                 _state.update {
                     it.copy(
-                        greeting = GreetingState(
-                            name = user,
-                            greeting = "Hi!"
-                        ),
                         datesList = days,
                         today = today,
                         selectedDate = today

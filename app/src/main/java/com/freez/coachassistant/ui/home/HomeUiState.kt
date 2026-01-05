@@ -14,7 +14,7 @@ data class HomeUiState(
     val loadingClassSessions: Boolean = true,
 )
 
-data class GreetingState(val name: String = "", val greeting: String = "Good Morning")
+data class GreetingState(val name: String?, val greeting: String?)
 
 data class MonthlyReport(val sessionCount: Int, val income: Money)
 

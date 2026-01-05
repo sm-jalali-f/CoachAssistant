@@ -5,4 +5,6 @@
     <string name="monthly_income">Month Income</string>
     <string name="class_session">Class sessions of %1s:</string>
     <string name="hi">Hi 👋</string>
+    <string name="there_is_no_class">There is no class in selected day.</string>
+    <string name="unknown">ناشناس</string>
 </resources>

@@ -5,4 +5,6 @@
     <string name="monthly_income">درآمد ماه</string>
     <string name="class_session">کلاس های %1s:</string>
     <string name="hi">سلام 👋</string>
+    <string name="there_is_no_class">در این روز کلاسی وجود ندارد.</string>
+    <string name="unknown">ناشناس</string>
 </resources>

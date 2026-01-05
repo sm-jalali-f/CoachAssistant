@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,14 +116,27 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 Spacer(Modifier.height(4.dp))
             }
         }
-//        items(20) { index ->
-//            SessionItem(
-//                Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
-//                studentName = "Student $index",
-//                time = "18:00",
-//                court = "Court ${index + 1}"
-//            )
-//        }
+        if (uiState.classSessionList.isNullOrEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 25.dp),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(R.string.there_is_no_class),
+                    fontWeight = FontWeight.Light
+//                    fontFamily = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+        items(uiState.classSessionList?.size ?: 0) { index ->
+            SessionItem(
+                Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                studentName = "Student $index",
+                time = "18:00",
+                court = "Court ${index + 1}"
+            )
+        }
     }
 }
 
@@ -131,7 +145,8 @@ fun HomeHeader(modifier: Modifier, greeting: GreetingState?, monthlyReport: Mont
     Column(modifier = modifier.padding(10.dp)) {
         ProfileAndGreeting(
             modifier = Modifier.fillMaxWidth(),
-            greeting?.name ?: "UserName", greeting?.greeting ?: stringResource(R.string.hi)
+            greeting?.name ?: stringResource(R.string.unknown),
+            greeting?.greeting ?: stringResource(R.string.hi)
         )
         Spacer(Modifier.height(10.dp))
         MonthlyStats(monthlyReport?.sessionCount ?: 0, monthlyReport?.income)
