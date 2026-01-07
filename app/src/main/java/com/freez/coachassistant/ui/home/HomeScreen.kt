@@ -1,5 +1,6 @@
 package com.freez.coachassistant.ui.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,8 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -136,6 +139,48 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 time = "18:00",
                 court = "Court ${index + 1}"
             )
+        }
+        item {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxWidth()
+                    .clickable {
+                        // TODO: Move to new class screen
+                    }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.onBackground,
+                            RoundedCornerShape(12.dp)
+                        )
+                        .background(Color.Transparent)
+                        .padding(vertical = 12.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(R.drawable.ic_add),
+                        contentDescription = "add new task",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 5.dp, end = 5.dp),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.new_class),
+                        fontWeight = FontWeight.Light
+                    )
+
+                }
+            }
+
         }
     }
 }
