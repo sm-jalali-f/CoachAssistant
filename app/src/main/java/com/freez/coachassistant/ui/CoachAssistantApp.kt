@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.freez.coachassistant.navigation.BottomNavigationBar
 import com.freez.coachassistant.navigation.CoachAssistantNavigationGraph
 import com.freez.coachassistant.navigation.Destination
@@ -19,10 +20,13 @@ import com.freez.domain.model.AppLanguage
 fun CoachAssistantApp(appLanguage: AppLanguage) {
     CoachAssistantTheme(appLanguage) {
         val assistantNavController = rememberCoachAssistantNavController()
-
-        SharedTransitionLayout {
+        CoachAssistantNavigationGraph(
+            coachNavController = assistantNavController,
+            startDestination = Destination.Main
+        )
+        /*SharedTransitionLayout {
             Scaffold(
-                bottomBar = { BottomNavigationBar(navController = assistantNavController.navController) }
+                bottomBar = { BottomNavigationBar(navController = bottomNavController) }
             ) { paddingValues ->
                 CoachAssistantNavigationGraph(
                     modifier = Modifier.padding(paddingValues),
@@ -30,6 +34,6 @@ fun CoachAssistantApp(appLanguage: AppLanguage) {
                     startDestination = Destination.Home
                 )
             }
-        }
+        }*/
     }
 }

@@ -44,13 +44,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.freez.coachassistant.R
+import com.freez.coachassistant.navigation.CoachAssistantNavController
+import com.freez.coachassistant.navigation.Destination
 import com.freez.domain.model.AppDate
 import com.freez.domain.model.Money
 
 private val HEADER_HEIGHT = 200.dp
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    navController: CoachAssistantNavController
+) {
 
     val uiState by homeViewModel.state.collectAsState()
     val listState = rememberLazyListState()
@@ -147,7 +152,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                     .clip(RoundedCornerShape(12.dp))
                     .fillMaxWidth()
                     .clickable {
-                        // TODO: Move to new class screen
+                        navController.navController.navigate(Destination.NewEventScreen.route)
                     }
             ) {
                 Row(
@@ -441,7 +446,7 @@ fun getWeekday(day: Int): String {
 @Preview
 @Composable
 fun StatBoxPreview() {
-    HomeScreen()
+//    HomeScreen()
 //    Box() {
 //        Text("Hi")
 //    }
