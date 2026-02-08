@@ -8,4 +8,15 @@
     <string name="there_is_no_class">در این روز کلاسی وجود ندارد.</string>
     <string name="unknown">ناشناس</string>
     <string name="new_class">کلاس جدید</string>
+    <string name="new_event_class">کلاس جدید</string>
+    <string name="club">باشگاه</string>
+    <string name="select_club">انتخاب باشگاه</string>
+    <string name="ball_boy">توپ جمع‌کن</string>
+    <string name="select_ball_boy">انتخاب توپ جمع‌کن</string>
+    <string name="ball_boy_cost">هزینه توپ جمع‌کن</string>
+    <string name="class_status">وضعیت کلاس</string>
+    <string name="save">ذخیره</string>
+    <string name="players">بازیکنان:New</string>
+    <string name="start_colon">شروع:</string>
+    <string name="end_colon">پایان:</string>
 </resources>
