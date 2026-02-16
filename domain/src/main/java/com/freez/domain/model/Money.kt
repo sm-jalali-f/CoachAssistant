@@ -3,4 +3,4 @@ package com.freez.domain.model
 import java.math.BigDecimal
 import java.util.Currency
 
-data class Money(val amount: BigDecimal, val currency: Currency = Currency.getInstance("IRR"))
+data class Money(val amount: BigDecimal, val currency: Currency = Currency.getInstance("IRT"))

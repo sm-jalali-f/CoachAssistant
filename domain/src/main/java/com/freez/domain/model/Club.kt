@@ -1,5 +1,7 @@
 package com.freez.domain.model
 
+import com.freez.domain.model.person.Person
+
 data class TennisCourt(
     val club: Club,
     val number: Int?
