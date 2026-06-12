@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(libs.versions.domain.get()))
+    implementation(project(libs.versions.databaseModule.get()))
     implementation(project(libs.versions.calendar.get()))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
