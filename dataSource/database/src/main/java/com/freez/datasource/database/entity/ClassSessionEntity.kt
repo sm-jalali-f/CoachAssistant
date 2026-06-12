@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.freez.datasource.database.model.SessionStatus
 
 @Entity(
     tableName = "class_sessions",
@@ -24,11 +25,11 @@ data class ClassSessionEntity(
     val endDateTime: Long,
 
     val courtId: Long?,
-    val courtPrice: Long,
-    val ballBoyPrice: Long,
+    val courtPrice: Long?,
+    val ballBoyPrice: Long?,
 
     val status: SessionStatus,
-    val discount: Long,
+    val discount: Long = 0L,
 
     val isTeaching: Boolean
 )

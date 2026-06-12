@@ -18,6 +18,9 @@ interface ClassSessionDao {
     @Query("SELECT * FROM class_sessions WHERE id = :id")
     suspend fun getById(id: Long): ClassSessionEntity?
 
+    @Query("SELECT * FROM class_sessions ORDER BY startDateTime")
+    suspend fun getAll(): List<ClassSessionEntity>
+
     @Query("""
         SELECT * FROM class_sessions 
         WHERE startDateTime BETWEEN :from AND :to
