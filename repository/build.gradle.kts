@@ -41,6 +41,8 @@ dependencies {
     implementation(project(libs.versions.databaseModule.get()))
     implementation(project(libs.versions.calendar.get()))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)

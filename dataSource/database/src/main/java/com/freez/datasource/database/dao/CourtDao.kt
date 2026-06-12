@@ -17,4 +17,7 @@ interface CourtDao {
 
     @Query("SELECT * FROM courts")
     suspend fun getAll(): List<CourtEntity>
+
+    @Query("SELECT * FROM courts WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<Long>): List<CourtEntity>
 }

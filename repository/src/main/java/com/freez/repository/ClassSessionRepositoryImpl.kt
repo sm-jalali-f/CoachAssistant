@@ -22,6 +22,11 @@ import com.freez.domain.model.person.Person
 import com.freez.domain.model.person.Role
 import com.freez.domain.model.person.StudentPerson
 import com.freez.domain.repositories.ClassSessionRepository
+import com.freez.multiCalendar.model.CalendarDate
+import com.freez.multiCalendar.provider.CalendarProvider
+import com.freez.multiCalendar.util.endOfDayMillis
+import com.freez.multiCalendar.util.startOfDayMillis
+import com.freez.multiCalendar.util.toGregorianDateComponents
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.Locale
@@ -32,22 +37,54 @@ class ClassSessionRepositoryImpl @Inject constructor(
     private val courtDao: CourtDao,
     private val studentClassDao: StudentClassDao,
     private val studentDao: StudentDao,
+    private val calendarProvider: CalendarProvider,
 ) : ClassSessionRepository {
 
-    override suspend fun getSessions(): List<ClassEvent> {
-        val courtsById = courtDao.getAll().associateBy { it.id }
-        val studentsById = studentDao.getAll().associateBy { it.id }
+    override suspend fun getSessions(from: AppDate, to: AppDate): List<ClassEvent> {
+        val fromMillis = calendarProvider
+            .toGregorianDateComponents(from.toCalendarDate())
+            .startOfDayMillis()
+        val toMillis = calendarProvider
+            .toGregorianDateComponents(to.toCalendarDate())
+            .endOfDayMillis()
 
-        return classSessionDao.getAll().map { session ->
-            val studentLinks = studentClassDao.getStudentsOfSession(session.id)
+        val sessions = classSessionDao.getSessionsInRange(fromMillis, toMillis)
+        if (sessions.isEmpty()) return emptyList()
+
+        val courtIds = sessions.mapNotNull { it.courtId }.distinct()
+        val courtsById = if (courtIds.isEmpty()) {
+            emptyMap()
+        } else {
+            courtDao.getByIds(courtIds).associateBy { it.id }
+        }
+
+        val sessionIds = sessions.map { it.id }
+        val studentLinksBySession = studentClassDao
+            .getStudentsOfSessions(sessionIds)
+            .groupBy { it.sessionId }
+
+        val studentIds = studentLinksBySession.values
+            .flatten()
+            .map { it.studentId }
+            .distinct()
+        val studentsById = if (studentIds.isEmpty()) {
+            emptyMap()
+        } else {
+            studentDao.getByIds(studentIds).associateBy { it.id }
+        }
+
+        return sessions.map { session ->
             session.toClassEvent(
                 court = session.courtId?.let { courtsById[it] },
-                studentLinks = studentLinks,
+                studentLinks = studentLinksBySession[session.id].orEmpty(),
                 studentsById = studentsById,
             )
         }
     }
 }
+
+private fun AppDate.toCalendarDate(): CalendarDate =
+    CalendarDate(year, month, day, dayOfWeek, monthName, null)
 
 private fun ClassSessionEntity.toClassEvent(
     court: CourtEntity?,

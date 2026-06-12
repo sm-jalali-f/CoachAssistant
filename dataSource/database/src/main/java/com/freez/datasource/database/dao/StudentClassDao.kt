@@ -14,6 +14,9 @@ interface StudentClassDao {
     @Query("SELECT * FROM student_classes WHERE sessionId = :sessionId")
     suspend fun getStudentsOfSession(sessionId: Long): List<StudentClassEntity>
 
+    @Query("SELECT * FROM student_classes WHERE sessionId IN (:sessionIds)")
+    suspend fun getStudentsOfSessions(sessionIds: List<Long>): List<StudentClassEntity>
+
     @Query("SELECT * FROM student_classes WHERE studentId = :studentId")
     suspend fun getSessionsOfStudent(studentId: Long): List<StudentClassEntity>
 }

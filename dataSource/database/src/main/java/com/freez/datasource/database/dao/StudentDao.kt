@@ -24,4 +24,7 @@ interface StudentDao {
 
     @Query("SELECT * FROM students WHERE id = :id")
     suspend fun getById(id: Long): StudentEntity?
+
+    @Query("SELECT * FROM students WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<Long>): List<StudentEntity>
 }
