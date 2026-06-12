@@ -2,11 +2,10 @@ package com.freez.domain.model
 
 import com.freez.domain.model.person.BallBoyPerson
 import com.freez.domain.model.person.CoachPerson
-import com.freez.domain.model.person.Person
 import com.freez.domain.model.person.StudentPerson
 import java.math.BigDecimal
 
-data class TennisEvent(
+data class ClassEvent(
     val startDateTime: AppDateTime,
     val endDateTime: AppDateTime,
     val court: TennisCourt?,
