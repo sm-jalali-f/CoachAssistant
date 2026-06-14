@@ -2,6 +2,7 @@ package com.freez.coachassistant.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.freez.domain.GetClassSessionUseCase
 import com.freez.domain.GetDaysUseCase
 import com.freez.domain.UserInfoUseCase
 import com.freez.domain.model.AppDate
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val userInfoUseCase: UserInfoUseCase,
     private val getDaysUseCase: GetDaysUseCase,
-//    private val classSessionUseCase: ClassSessionUseCase
+    private val getClassSessionUseCase: GetClassSessionUseCase
 ) : ViewModel() {
 
     private var _state: MutableStateFlow<HomeUiState> =
@@ -68,7 +69,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadClassSessions(date: AppDate) {
-        // TODO:
+        viewModelScope.launch {
+            getClassSessionUseCase(date, date)
+        }
+
     }
     /* private fun selectDate(date: AppDate) {
          _state.update {

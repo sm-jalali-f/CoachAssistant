@@ -39,9 +39,12 @@ fun CoachAssistantNavigationGraph(
 
 
         composable(Destination.NewEventScreen.route) { backStackEntry ->
-            val viewModel: NewEventViewModel =
-                hiltViewModel(backStackEntry)
-            NewClassEventScreen({}, {}, viewModel)
+            val viewModel: NewEventViewModel = hiltViewModel(backStackEntry)
+            NewClassEventScreen(
+                onClose = { coachNavController.navController.popBackStack() },
+                onSave = { coachNavController.navController.popBackStack() },
+                viewModel = viewModel,
+            )
         }
     }
 }
