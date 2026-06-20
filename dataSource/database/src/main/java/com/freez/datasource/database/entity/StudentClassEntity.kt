@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = StudentEntity::class,
+            entity = PersonEntity::class,
             parentColumns = ["id"],
             childColumns = ["studentId"],
             onDelete = ForeignKey.CASCADE
@@ -26,6 +26,6 @@ import androidx.room.PrimaryKey
 data class StudentClassEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val sessionId: Long,
-    val studentId: Long,
+    val studentId: Long, // Refers to PersonEntity.id where isStudent = true
     val teachingPriceShare: Long
 )

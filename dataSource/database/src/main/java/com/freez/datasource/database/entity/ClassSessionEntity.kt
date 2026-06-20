@@ -14,9 +14,25 @@ import com.freez.datasource.database.model.SessionStatus
             parentColumns = ["id"],
             childColumns = ["courtId"],
             onDelete = ForeignKey.SET_NULL
+        ),
+        ForeignKey(
+            entity = PersonEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["coachId"],
+            onDelete = ForeignKey.SET_NULL
+        ),
+        ForeignKey(
+            entity = PersonEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["ballBoyId"],
+            onDelete = ForeignKey.SET_NULL
         )
     ],
-    indices = [Index("courtId")]
+    indices = [
+        Index("courtId"),
+        Index("coachId"),
+        Index("ballBoyId")
+    ]
 )
 data class ClassSessionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -26,6 +42,9 @@ data class ClassSessionEntity(
 
     val courtId: Long?,
     val courtPrice: Long?,
+    
+    val coachId: Long?,
+    val ballBoyId: Long?,
     val ballBoyPrice: Long?,
 
     val status: SessionStatus,

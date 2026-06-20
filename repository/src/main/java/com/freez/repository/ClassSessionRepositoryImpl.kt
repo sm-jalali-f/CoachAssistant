@@ -2,12 +2,12 @@ package com.freez.repository
 
 import com.freez.datasource.database.dao.ClassSessionDao
 import com.freez.datasource.database.dao.CourtDao
+import com.freez.datasource.database.dao.PersonDao
 import com.freez.datasource.database.dao.StudentClassDao
-import com.freez.datasource.database.dao.StudentDao
 import com.freez.datasource.database.entity.ClassSessionEntity
 import com.freez.datasource.database.entity.CourtEntity
+import com.freez.datasource.database.entity.PersonEntity
 import com.freez.datasource.database.entity.StudentClassEntity
-import com.freez.datasource.database.entity.StudentEntity
 import com.freez.datasource.database.model.SessionStatus
 import com.freez.domain.model.AppDate
 import com.freez.domain.model.AppDateTime
@@ -18,8 +18,11 @@ import com.freez.domain.model.Hour
 import com.freez.domain.model.Minute
 import com.freez.domain.model.Money
 import com.freez.domain.model.TennisCourt
+import com.freez.domain.model.person.BallBoyPerson
+import com.freez.domain.model.person.CoachPerson
 import com.freez.domain.model.person.Person
 import com.freez.domain.model.person.Role
+import com.freez.domain.model.person.SkillLevel
 import com.freez.domain.model.person.StudentPerson
 import com.freez.domain.repositories.ClassSessionRepository
 import com.freez.multiCalendar.model.CalendarDate
@@ -36,7 +39,7 @@ class ClassSessionRepositoryImpl @Inject constructor(
     private val classSessionDao: ClassSessionDao,
     private val courtDao: CourtDao,
     private val studentClassDao: StudentClassDao,
-    private val studentDao: StudentDao,
+    private val personDao: PersonDao,
     private val calendarProvider: CalendarProvider,
 ) : ClassSessionRepository {
 
@@ -52,32 +55,24 @@ class ClassSessionRepositoryImpl @Inject constructor(
         if (sessions.isEmpty()) return emptyList()
 
         val courtIds = sessions.mapNotNull { it.courtId }.distinct()
-        val courtsById = if (courtIds.isEmpty()) {
-            emptyMap()
-        } else {
-            courtDao.getByIds(courtIds).associateBy { it.id }
-        }
+        val courtsById = if (courtIds.isEmpty()) emptyMap() else courtDao.getByIds(courtIds).associateBy { it.id }
 
         val sessionIds = sessions.map { it.id }
-        val studentLinksBySession = studentClassDao
-            .getStudentsOfSessions(sessionIds)
-            .groupBy { it.sessionId }
+        val studentLinksBySession = studentClassDao.getStudentsOfSessions(sessionIds).groupBy { it.sessionId }
 
-        val studentIds = studentLinksBySession.values
-            .flatten()
-            .map { it.studentId }
-            .distinct()
-        val studentsById = if (studentIds.isEmpty()) {
-            emptyMap()
-        } else {
-            studentDao.getByIds(studentIds).associateBy { it.id }
-        }
+        val personIds = (studentLinksBySession.values.flatten().map { it.studentId } +
+                sessions.mapNotNull { it.coachId } +
+                sessions.mapNotNull { it.ballBoyId }).distinct()
+
+        val peopleById = if (personIds.isEmpty()) emptyMap() else personDao.getByIds(personIds).associateBy { it.id }
 
         return sessions.map { session ->
             session.toClassEvent(
                 court = session.courtId?.let { courtsById[it] },
+                coach = session.coachId?.let { peopleById[it] },
+                ballBoy = session.ballBoyId?.let { peopleById[it] },
                 studentLinks = studentLinksBySession[session.id].orEmpty(),
-                studentsById = studentsById,
+                peopleById = peopleById,
             )
         }
     }
@@ -88,25 +83,25 @@ private fun AppDate.toCalendarDate(): CalendarDate =
 
 private fun ClassSessionEntity.toClassEvent(
     court: CourtEntity?,
+    coach: PersonEntity?,
+    ballBoy: PersonEntity?,
     studentLinks: List<StudentClassEntity>,
-    studentsById: Map<Long, StudentEntity>,
+    peopleById: Map<Long, PersonEntity>,
 ): ClassEvent {
     val players = studentLinks.mapNotNull { link ->
-        studentsById[link.studentId]?.toStudentPerson()
+        peopleById[link.studentId]?.let { StudentPerson.from(it.toPerson()) }
     }
     val teachingPrice = if (isTeaching) {
         studentLinks.sumOf { it.teachingPriceShare }.toMoneyOrNull()
-    } else {
-        null
-    }
+    } else null
 
     return ClassEvent(
         startDateTime = startDateTime.toAppDateTime(),
         endDateTime = endDateTime.toAppDateTime(),
         court = court?.toTennisCourt(),
         players = players,
-        coach = null,
-        ballBoy = null,
+        coach = coach?.let { CoachPerson.from(it.toPerson()) },
+        ballBoy = ballBoy?.let { BallBoyPerson.from(it.toPerson()) },
         courtRentPrice = courtPrice.toMoneyOrNull(),
         ballBoyPrice = ballBoyPrice.toMoneyOrNull(),
         teachingPrice = teachingPrice,
@@ -114,6 +109,15 @@ private fun ClassSessionEntity.toClassEvent(
         courtRentDiscountPercent = BigDecimal.valueOf(discount),
         teachingFeeDiscountPercent = BigDecimal.ZERO,
     )
+}
+
+private fun PersonEntity.toPerson(): Person {
+    val roles = mutableSetOf<Role>()
+    if (isCoach) roles.add(Role.Coach(licenseId, lastHourlyRate.toMoneyOrNull()))
+    if (isStudent) roles.add(Role.Student(skillLevel?.let { SkillLevel.of(it) }, studentColor ?: 0L))
+    if (isBallBoy) roles.add(Role.BallBoy(lastWage.toMoneyOrNull(), ballBoyColor))
+    
+    return Person(name = name, phoneNumber = phoneNumber, roles = roles)
 }
 
 private fun CourtEntity.toTennisCourt(): TennisCourt {
@@ -128,15 +132,6 @@ private fun CourtEntity.toTennisCourt(): TennisCourt {
         manager = null,
     )
     return TennisCourt(club = club, number = null)
-}
-
-private fun StudentEntity.toStudentPerson(): StudentPerson {
-    val person = Person(
-        name = name,
-        phoneNumber = "",
-        roles = setOf(Role.Student(skillLevel = null, color = 0L)),
-    )
-    return StudentPerson.from(person)!!
 }
 
 private fun SessionStatus.toEventStatus(): EventStatus = when (this) {

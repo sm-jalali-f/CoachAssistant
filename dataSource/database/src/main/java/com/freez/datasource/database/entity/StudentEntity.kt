@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class StudentEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
+    val phoneNumber: String,
+    val color: Long,
     val defaultTeachingCost: Long? = null
 )

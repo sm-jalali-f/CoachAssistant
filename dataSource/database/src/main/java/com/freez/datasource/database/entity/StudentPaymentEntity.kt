@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "student_payments",
     foreignKeys = [
         ForeignKey(
-            entity = StudentEntity::class,
+            entity = PersonEntity::class,
             parentColumns = ["id"],
             childColumns = ["studentId"],
             onDelete = ForeignKey.CASCADE
@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 )
 data class StudentPaymentEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val studentId: Long,
+    val studentId: Long, // Refers to PersonEntity.id where isStudent = true
     val value: Long,
     val date: Long
 )
